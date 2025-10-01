@@ -10,15 +10,15 @@
       "url": "https://foundryvtt.com/community/luizbertoni"
     }
   ],
-  "url": "This is auto replaced",
+  "url": "#{URL}",
   "flags": {},
-  "version": "This is auto replaced",
+  "version": "#{VERSION}#",
   "compatibility": {
     "minimum": "13",
     "verified": "13.348"
   },
   "esmodules": [
-    "./scripts/init.js"
+    "./scripts/token-action-hud-sdm.min.js"
   ],
   "scripts": [
   ],
@@ -65,10 +65,9 @@
     }
   },
   "socket": false,
-  "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
-  "readme": "https://github.com/luizrcb/token-action-hud-sdm#README",
-  "protected": false,
-  "coreTranslation": false,
-  "library": false
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "readme": "README.md",
+  "license": "LICENSE",
+  "library": "false"
 }
