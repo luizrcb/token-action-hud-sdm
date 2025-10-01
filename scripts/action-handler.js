@@ -374,7 +374,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               : resources === 'run_out'
                 ? '<i class="fa-solid fa-battery-empty"></i>'
                 : ''
-          const icon3 = itemData.system.readied
+          const icon3 = (itemData.system.readied || itemData.type === 'trait')
             ? '<i class="fa fa-shield"></i>'
             : ''
 

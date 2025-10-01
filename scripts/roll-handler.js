@@ -125,7 +125,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           return await item.toggleReadied()
         }
 
-        if (!item.system.readied) {
+        if (!item.system.readied && item.type !== 'trait') {
           return
         }
 
