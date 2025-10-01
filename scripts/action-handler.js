@@ -190,24 +190,28 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         {
           id: `${this.actor.id}-melee`,
           name: coreModule.api.Utils.i18n('SDM.AttackMelee'),
+          icon1: '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
           listName: 'Attack: Melee',
           encodedValue: 'attack|melee'
         },
         {
           id: `${this.actor.id}-ranged`,
           name: coreModule.api.Utils.i18n('SDM.AttackRanged'),
+          icon1: '<i class="fa-solid fa-gun pine"></i>',
           listName: 'Attack: Ranged',
           encodedValue: 'attack|ranged'
         },
         {
           id: `${this.actor.id}-fantascience`,
           name: coreModule.api.Utils.i18n('SDM.AttackFantascience'),
+          icon1: '<i class="fa-solid fa-hat-wizard heart"></i>',
           listName: 'Attack: Fantascience',
           encodedValue: 'attack|fantascience'
         },
         {
           id: `${this.actor.id}-oldtech`,
           name: coreModule.api.Utils.i18n('SDM.AttackOldtech'),
+          icon1: '<i class="fa-solid fa-gamepad plum"></i>',
           listName: 'Attack: Oldtech',
           encodedValue: 'attack|oldtech'
         }
@@ -226,7 +230,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         {
           id: `${this.actor.id}-reaction`,
           name: coreModule.api.Utils.i18n('SDM.Reaction'),
-          icon1: '<i class="fa-solid fa-masks-theater"></i>',
+          icon1: '<i class="fa-solid fa-masks-theater sky"></i>',
           listName: 'Other: Reaction',
           encodedValue: 'reaction|reaction'
         },
@@ -244,18 +248,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     async #buildNPCombatActions () {
-      const style = game.settings.get('token-action-hud-core', 'style')
       const attackGroup = { id: 'attacks', type: 'system' }
       const attackActions = [
         {
           id: `${this.actor.id}-attack`,
           name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
           tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
-          icon1: `<i class="melee-attack ${
-            style.includes('Light') || style.includes('pathfinder')
-              ? ''
-              : 'white'
-          }"></i>`,
+          icon1: '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
           listName: 'attack: Attack Roll',
           encodedValue: 'attack|attack'
         },
@@ -263,7 +262,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           id: `${this.actor.id}-damage`,
           name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
           tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
-          icon1: '<i class="fa-solid fa-explosion"></i>',
+          icon1: '<i class="fa-solid fa-explosion azure"></i>',
           listName: 'Damage: rollNPCDamage',
           encodedValue: 'rollNPCDamage|rollNPCDamage'
         }
@@ -277,7 +276,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           id: `${this.actor.id}-save`,
           name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.FieldSaveTarget') }),
           tooltip: game.i18n.format('SDM.SavingThrowRoll', { ability: coreModule.api.Utils.i18n('TYPES.Actor.npc') }),
-          icon1: '<i class="fa fa-shield-cat"></i>',
+          icon1: '<i class="fa fa-shield-cat plum"></i>',
           listName: 'attack: Attack Roll',
           encodedValue: 'save|npc'
         }
@@ -295,7 +294,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         {
           id: `${this.actor.id}-morale`,
           name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Morale') }),
-          icon1: '<i class="fa-solid fa-person-running"></i>',
+          icon1: '<i class="fa-solid fa-person-running rust"></i>',
           listName: 'Other: Morale',
           encodedValue: 'rollNPCMorale|rollNPCMorale'
         }

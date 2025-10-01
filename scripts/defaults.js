@@ -19,24 +19,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       {
         nestId: 'abilities',
         id: 'abilities',
+        settings: {
+          image: 'icons/skills/social/intimidation-impressing.webp',
+        },
         name: coreModule.api.Utils.i18n('SDM.FieldAbilitiesPl'),
         groups: [{ ...groups.abilities, nestId: 'abilities_abilities' }]
       },
       {
         nestId: 'saves',
         id: 'saves',
+        settings: {
+          image: 'icons/skills/melee/shield-block-gray-orange.webp'
+        },
         name: coreModule.api.Utils.i18n('SDM.FieldSavePl'),
         groups: [{ ...groups.saves, nestId: 'saves_saves' }]
       },
       {
         nestId: 'attacks',
         id: 'attacks',
+        settings: {
+          image: 'icons/skills/melee/weapons-crossed-swords-teal.webp',
+        },
         name: coreModule.api.Utils.i18n('SDM.FieldAttackPl'),
         groups: [{ ...groups.attacks, nestId: 'attacks_attacks' }]
       },
       {
         nestId: 'other',
         id: 'other',
+        settings: {
+          image: 'icons/magic/symbols/clover-luck-white-green.webp',
+        },
         name: coreModule.api.Utils.i18n('SDM.FieldOther'),
         groups: [
           { ...groups.player, nestId: 'other_player' },
@@ -48,6 +60,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         nestId: 'inventory',
         id: 'inventory',
         name: coreModule.api.Utils.i18n('SDM.TabInventory'),
+        settings: {
+          image: 'icons/containers/chest/chest-simple-box-red.webp'
+        },
         groups: [
           { ...groups.album, nestId: 'inventory_album' },
           { ...groups.power, nestId: 'inventory_power' },
