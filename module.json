@@ -10,7 +10,8 @@
       "url": "https://foundryvtt.com/community/luizbertoni"
     }
   ],
-  "url": "#{URL}",
+  "url": "https://github.com/luizrcb/token-action-hud-sdm",
+  "bugs": "https://github.com/luizrcb/token-action-hud-sdm/issues",
   "flags": {},
   "version": "#{VERSION}#",
   "compatibility": {
