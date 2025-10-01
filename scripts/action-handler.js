@@ -1,10 +1,10 @@
 // System Module Imports
-import { ACTION_TYPE, ITEM_TYPE } from "./constants.js";
-import { Utils } from "./utils.js";
+import { ACTION_TYPE, ITEM_TYPE } from './constants.js'
+import { Utils } from './utils'
 
-export let ActionHandler = null;
+export let ActionHandler = null
 
-Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
+Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
   /**
    * Extends Token Action HUD Core's ActionHandler class and builds system-defined actions for the HUD
    */
@@ -14,26 +14,25 @@ Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
      * Called by Token Action HUD Core
      * @override
      * @param {array} groupIds
-     */ a;
-    async buildSystemActions(groupIds) {
+     */ a
+    async buildSystemActions (groupIds) {
       // Set actor and token variables
-      this.actors = !this.actor ? this._getActors() : [this.actor];
-      this.actorType = this.actor?.type;
-
-      // Settings
-      this.displayUnequipped = Utils.getSetting("displayUnequipped");
+      this.actors = !this.actor ? this._getActors() : [this.actor]
+      this.actorType = this.actor?.type
 
       // Set items variable
       if (this.actor) {
-        let items = this.actor.items;
-        items = coreModule.api.Utils.sortItemsByName(items);
-        this.items = items;
+        let items = this.actor.items
+        items = coreModule.api.Utils.sortItemsByName(items)
+        this.items = items
       }
 
-      if (this.actorType === "character") {
-        this.#buildCharacterActions();
-      } else if (!this.actor) {
-        this.#buildMultipleTokenActions();
+      if (this.actorType === 'character') {
+        this.#buildCharacterActions()
+      } else if (this.actorType === 'npc') {
+        this.#buildNPCActions()
+      } else if (this.actorType === 'caravan') {
+        this.#buildCaravanActions()
       }
     }
 
@@ -41,256 +40,343 @@ Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
      * Build character actions
      * @private
      */
-    #buildCharacterActions() {
-      this.#buildAbilities();
-      this.#buildSaves();
-      this.#buildAttacks();
-      this.#buildOther();
-      this.#buildInventory();
+    #buildCharacterActions () {
+      this.#buildAbilities()
+      this.#buildSaves()
+      this.#buildAttacks()
+      this.#buildCharacterOther()
+      this.#buildInventory()
     }
 
     /**
-     * Build multiple token actions
+     * Build NPC Actions
      * @private
      * @returns {object}
      */
-    #buildMultipleTokenActions() {}
+    #buildNPCActions () {
+      this.#buildNPCombatActions()
+      this.#buildNPCOther()
+      this.#buildInventory()
+    }
 
-    async #buildAbilities() {
-      if (!this.actor) return;
+    async #buildAbilities () {
+      if (!this.actor) return
 
-      const data = this.actor.system;
       // const abilities = data.abilities;
-      const groupData = { id: "abilities", type: "system" };
+      const groupData = { id: 'abilities', type: 'system' }
       const actions = [
         {
           id: `${this.actor.id}-str`,
-          name: "STR",
-          //icon1: `<i class="fa-solid fa-hand-fist" data-tooltip="Strength"></i>`,
-          tooltip: "Strength",
-          listName: "Ability: Strength",
-          encodedValue: "ability|str",
+          name: coreModule.api.Utils.i18n('SDM.AbilityStrAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityStr'),
+          listName: 'Ability: Strength',
+          encodedValue: 'ability|str'
         },
         {
           id: `${this.actor.id}-end`,
-          name: "END",
-          //icon1: `<i class="fa-solid fa-heartbeat" data-tooltip="Endurance"></i>`,
-          tooltip: "Endurance",
-          listName: "Ability: Endurance",
-          encodedValue: "ability|end",
+          name: coreModule.api.Utils.i18n('SDM.AbilityEndAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityEnd'),
+          listName: 'Ability: Endurance',
+          encodedValue: 'ability|end'
         },
         {
           id: `${this.actor.id}-agi`,
-          name: "AGI",
-          //icon1: `<i class="fa-solid fa-person-running" data-tooltip="Agility"></i>`,
-          tooltip: "Agility",
-          listName: "Ability: Agility",
-          encodedValue: "ability|agi",
+          name: coreModule.api.Utils.i18n('SDM.AbilityAgiAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityAgi'),
+          listName: 'Ability: Agility',
+          encodedValue: 'ability|agi'
         },
         {
           id: `${this.actor.id}-cha`,
-          name: "CHA",
-          tooltip: "Charisma",
-          listName: "Ability: Charisma",
-          encodedValue: "ability|cha",
+          name: coreModule.api.Utils.i18n('SDM.AbilityChaAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityCha'),
+          listName: 'Ability: Charisma',
+          encodedValue: 'ability|cha'
         },
         {
           id: `${this.actor.id}-aur`,
-          name: "AUR",
-          tooltip: "Aura",
-          listName: "Ability: Aura",
-          encodedValue: "ability|aur",
+          name: coreModule.api.Utils.i18n('SDM.AbilityAurAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityAur'),
+          listName: 'Ability: Aura',
+          encodedValue: 'ability|aur'
         },
         {
           id: `${this.actor.id}-tho`,
-          name: "THO",
-          tooltip: "Thought",
-          listName: "Ability: Thought",
-          encodedValue: "ability|tho",
-        },
-      ];
-      this.addActions(actions, groupData);
+          name: coreModule.api.Utils.i18n('SDM.AbilityThoAbbr').toUpperCase(),
+          tooltip: coreModule.api.Utils.i18n('SDM.AbilityTho'),
+          listName: 'Ability: Thought',
+          encodedValue: 'ability|tho'
+        }
+      ]
+      this.addActions(actions, groupData)
     }
 
-    async #buildSaves() {
-      if (!this.actor) return;
+    async #buildSaves () {
+      if (!this.actor) return
 
-      const data = this.actor.system;
-      console.log(this.actor.sheet);
       // const abilities = data.abilities;
-      const groupData = { id: "saves", type: "system" };
+      const groupData = { id: 'saves', type: 'system' }
       const actions = [
         {
           id: `${this.actor.id}-save-str`,
-          name: "STR",
-          icon1: `<i class="fa-solid fa-hand-fist"></i>`,
-          tooltip: "Strength Saving Throw",
-          listName: "Save: Strength",
-          encodedValue: "save|str",
+          name: coreModule.api.Utils.i18n('SDM.AbilityStrAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-hand-fist rust"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityStr')
+          }),
+          listName: 'Save: Strength',
+          encodedValue: 'save|str'
         },
         {
           id: `${this.actor.id}-save-end`,
-          name: "END",
-          icon1: `<i class="fa-solid fa-heartbeat"></i>`,
-          tooltip: "Endurance Saving Throw",
-          listName: "Save: Endurance",
-          encodedValue: "save|end",
+          name: coreModule.api.Utils.i18n('SDM.AbilityEndAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-heartbeat pumpkin"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityEnd')
+          }),
+          listName: 'Save: Endurance',
+          encodedValue: 'save|end'
         },
         {
           id: `${this.actor.id}-save-agi`,
-          name: "AGI",
-          icon1: `<i class="fa-solid fa-person-running"></i>`,
-          tooltip: "Agility Saving Throw",
-          listName: "Save: Agility",
-          encodedValue: "save|agi",
+          name: coreModule.api.Utils.i18n('SDM.AbilityAgiAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-person-running amber"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityAgi')
+          }),
+          listName: 'Save: Agility',
+          encodedValue: 'save|agi'
         },
         {
           id: `${this.actor.id}-save-cha`,
-          name: "CHA",
-          icon1: `<i class="fa-solid fa-clover"></i>`,
-          tooltip: "Charisma Saving Throw",
-          listName: "Save: Charisma",
-          encodedValue: "save|cha",
+          name: coreModule.api.Utils.i18n('SDM.AbilityChaAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-clover sky"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityCha')
+          }),
+          listName: 'Save: Charisma',
+          encodedValue: 'save|cha'
         },
         {
           id: `${this.actor.id}-save-aur`,
-          name: "AUR",
-          icon1: `<i class="fa-solid fa-splotch"></i>`,
-          tooltip: "Aura Saving Throw",
-          listName: "Save: Aura",
-          encodedValue: "save|aur",
+          name: coreModule.api.Utils.i18n('SDM.AbilityAurAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-splotch azure"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityAur')
+          }),
+          listName: 'Save: Aura',
+          encodedValue: 'save|aur'
         },
         {
           id: `${this.actor.id}-save-tho`,
-          name: "THO",
-          icon1: `<i class="fa-solid fa-cloud"></i>`,
-          tooltip: "Thought Saving Throw",
-          listName: "Save: Thought",
-          encodedValue: "save|tho",
-        },
-      ];
-      this.addActions(actions, groupData);
+          name: coreModule.api.Utils.i18n('SDM.AbilityThoAbbr').toUpperCase(),
+          icon1: '<i class="fa-solid fa-cloud royal"></i>',
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('SDM.AbilityTho')
+          }),
+          listName: 'Save: Thought',
+          encodedValue: 'save|tho'
+        }
+      ]
+      this.addActions(actions, groupData)
     }
 
-    async #buildAttacks() {
-      if (!this.actor) return;
+    async #buildAttacks () {
+      if (!this.actor) return
 
-      const data = this.actor.system;
       // const abilities = data.abilities;
-      const groupData = { id: "attacks", type: "system" };
+      const groupData = { id: 'attacks', type: 'system' }
       const actions = [
         {
           id: `${this.actor.id}-melee`,
-          name: "Melee",
-          listName: "Attack: Melee",
-          tooltip: "",
-          encodedValue: "attack|melee",
+          name: coreModule.api.Utils.i18n('SDM.AttackMelee'),
+          listName: 'Attack: Melee',
+          encodedValue: 'attack|melee'
         },
         {
           id: `${this.actor.id}-ranged`,
-          name: "Ranged",
-          listName: "Attack: Ranged",
-          tooltip: "",
-          encodedValue: "attack|ranged",
+          name: coreModule.api.Utils.i18n('SDM.AttackRanged'),
+          listName: 'Attack: Ranged',
+          encodedValue: 'attack|ranged'
         },
         {
           id: `${this.actor.id}-fantascience`,
-          name: "Fantascience",
-          listName: "Attack: Fantascience",
-          tooltip: "",
-          encodedValue: "attack|fantascience",
+          name: coreModule.api.Utils.i18n('SDM.AttackFantascience'),
+          listName: 'Attack: Fantascience',
+          encodedValue: 'attack|fantascience'
         },
         {
           id: `${this.actor.id}-oldtech`,
-          name: "Oldtech",
-          listName: "Attack: Oldtech",
-          tooltip: "",
-          encodedValue: "attack|oldtech",
-        },
-      ];
-      this.addActions(actions, groupData);
+          name: coreModule.api.Utils.i18n('SDM.AttackOldtech'),
+          listName: 'Attack: Oldtech',
+          encodedValue: 'attack|oldtech'
+        }
+      ]
+      this.addActions(actions, groupData)
     }
 
-    async #buildOther() {
-      if (!this.actor) return;
+    async #buildCharacterOther () {
+      if (!this.actor) return
 
-      //const data = this.actor.system;
-      const hero_dice = this.actor.system.hero_dice;
-      const groupData = { id: "player", type: "system" };
+      // const data = this.actor.system;
+      const heroDice = this.actor.system.hero_dice
+      const groupData = { id: 'player', type: 'system' }
 
       const actions = [
         {
           id: `${this.actor.id}-reaction`,
-          name: "Reaction",
-          icon1: `<i class="fa-solid fa-masks-theater"></i>`,
-          tooltip: "Reaction",
-          listName: "Other: Reaction",
-          encodedValue: "reaction|reaction",
+          name: coreModule.api.Utils.i18n('SDM.Reaction'),
+          icon1: '<i class="fa-solid fa-masks-theater"></i>',
+          listName: 'Other: Reaction',
+          encodedValue: 'reaction|reaction'
         },
         {
           id: `${this.actor.id}-hero-dice`,
-          name: `Hero Dice: ${hero_dice.value}/${hero_dice.max}`,
-          icon1: `<i class="fa-solid fa-dice-d6"></i>`,
-          tooltip: "Hero Dice",
-          listName: "Other: Hero Dice",
-          encodedValue: "heroichealing|heroichealing",
-        },
-      ];
+          name: `${Utils.toPascalCase(coreModule.api.Utils.i18n('SDM.HeroDice'))}: ${heroDice.value}/${heroDice.max}`,
+          icon1: '<i class="fa-solid fa-dice-d6"></i>',
+          tooltip: Utils.toPascalCase(coreModule.api.Utils.i18n('SDM.HeroDice')),
+          listName: 'Other: Hero Dice',
+          encodedValue: 'heroichealing|heroichealing'
+        }
+      ]
 
-      this.addActions(actions, groupData);
+      this.addActions(actions, groupData)
+    }
+
+    async #buildNPCombatActions () {
+      const style = game.settings.get('token-action-hud-core', 'style')
+      const attackGroup = { id: 'attacks', type: 'system' }
+      const attackActions = [
+        {
+          id: `${this.actor.id}-attack`,
+          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
+          tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
+          icon1: `<i class="melee-attack ${
+            style.includes('Light') || style.includes('pathfinder')
+              ? ''
+              : 'white'
+          }"></i>`,
+          listName: 'attack: Attack Roll',
+          encodedValue: 'attack|attack'
+        },
+        {
+          id: `${this.actor.id}-damage`,
+          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
+          tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
+          icon1: '<i class="fa-solid fa-explosion"></i>',
+          listName: 'Damage: rollNPCDamage',
+          encodedValue: 'rollNPCDamage|rollNPCDamage'
+        }
+      ]
+
+      this.addActions(attackActions, attackGroup)
+
+      const savesGroup = { id: 'saves', type: 'system' }
+      const saveActions = [
+        {
+          id: `${this.actor.id}-save`,
+          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.FieldSaveTarget') }),
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', { ability: coreModule.api.Utils.i18n('TYPES.Actor.npc') }),
+          icon1: '<i class="fa fa-shield-cat"></i>',
+          listName: 'attack: Attack Roll',
+          encodedValue: 'save|npc'
+        }
+      ]
+
+      this.addActions(saveActions, savesGroup)
+    }
+
+    async #buildNPCOther () {
+      if (!this.actor) return
+
+      const groupData = { id: 'npc', type: 'system' }
+
+      const actions = [
+        {
+          id: `${this.actor.id}-morale`,
+          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Morale') }),
+          icon1: '<i class="fa-solid fa-person-running"></i>',
+          listName: 'Other: Morale',
+          encodedValue: 'rollNPCMorale|rollNPCMorale'
+        }
+      ]
+
+      this.addActions(actions, groupData)
+    }
+
+    async #buildCaravanActions () {
+      const groupData = { id: 'caravan', type: 'system' }
+
+      const actions = [
+        {
+          id: `${this.actor.id}-consume-supply`,
+          name: coreModule.api.Utils.i18n('SDM.ConsumeSupply'),
+          icon1: '<i class="fa fa-sack-xmark"></i>',
+          listName: 'Other: Consume Supplies',
+          encodedValue: 'consumeSupplies|consumeSupplies'
+        }
+      ]
+
+      this.addActions(actions, groupData)
     }
 
     /**
      * Build inventory
      * @private
      */
-    async #buildInventory() {
-      if (this.items.size === 0) return;
+    async #buildInventory () {
+      if (this.items.size === 0) return
 
-      const actionTypeId = "item";
-      const inventoryMap = new Map();
+      const actionTypeId = 'item'
+      const inventoryMap = new Map()
 
       for (const [itemId, itemData] of this.items) {
-        const system = itemData.system;
-        const type = system.type;
-        const equipped = system.readied;
-
-        if (equipped || this.displayUnequipped) {
-          const typeMap = inventoryMap.get(type) ?? new Map();
-          typeMap.set(itemId, itemData);
-          inventoryMap.set(type, typeMap);
-        }
+        const system = itemData.system
+        const type = system.type
+        const typeMap = inventoryMap.get(type) ?? new Map()
+        typeMap.set(itemId, itemData)
+        inventoryMap.set(type, typeMap)
       }
 
       for (const [type, typeMap] of inventoryMap) {
-        const groupId = ITEM_TYPE[type]?.groupId;
+        const groupId = ITEM_TYPE[type]?.groupId
 
-        if (!groupId) continue;
+        if (!groupId) continue
 
-        const groupData = { id: groupId, type: "system" };
+        const groupData = { id: groupId, type: 'system' }
 
         // Get actions
         const actions = [...typeMap].map(([itemId, itemData]) => {
-          const id = itemId;
-          const name = itemData.getNameTitle();
+          const id = itemId
+          const name = itemData.getNameTitle()
           const actionTypeName = coreModule.api.Utils.i18n(
             ACTION_TYPE[actionTypeId]
-          );
+          )
           const listName = `${
-            actionTypeName ? `${actionTypeName}: ` : ""
-          }${name}`;
-          const encodedValue = [actionTypeId, id].join(this.delimiter);
-          const status = itemData.system.status;
-          const resources = itemData.system.resources;
+            actionTypeName ? `${actionTypeName}: ` : ''
+          }${name}`
+          const encodedValue = [actionTypeId, id].join(this.delimiter)
+          const status = itemData.system.status
+          const resources = itemData.system.resources
 
-          const brokenItem = status === 'broken';
-          const runOutItem = resources === 'run_out';
+          const brokenItem = status === 'broken'
+          const runOutItem = resources === 'run_out'
 
-          let icon1 = status === 'notched' ? `<i class="fa fa-hammer"></i>` : status === 'broken' ? `<i class="fa fa-ban"></i>` : ''; 
-          let icon2 = resources === 'running_low' ? 
-          `<i class="fa-solid fa-battery-quarter"></i>` :
-           resources === 'run_out' ? `<i class="fa-solid fa-battery-empty"></i>` : ''; 
-          let icon3 = itemData.system.readied ? '<i class="fa fa-shield"></i>' : '';
+          const icon1 =
+            status === 'notched'
+              ? '<i class="fa fa-hammer"></i>'
+              : status === 'broken'
+                ? '<i class="fa fa-ban"></i>'
+                : ''
+          const icon2 =
+            resources === 'running_low'
+              ? '<i class="fa-solid fa-battery-quarter"></i>'
+              : resources === 'run_out'
+                ? '<i class="fa-solid fa-battery-empty"></i>'
+                : ''
+          const icon3 = itemData.system.readied
+            ? '<i class="fa fa-shield"></i>'
+            : ''
 
           return {
             id,
@@ -299,16 +385,16 @@ Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
             icon1,
             icon2,
             icon3,
-            cssClass: (brokenItem || runOutItem) ? 'disabled': '', 
+            cssClass: brokenItem || runOutItem ? 'disabled' : '',
             tooltip: itemData.getInventoryTitle(),
             listName,
-            encodedValue,
-          };
-        });
+            encodedValue
+          }
+        })
 
         // TAH Core method to add actions to the action list
-        this.addActions(actions, groupData);
+        this.addActions(actions, groupData)
       }
     }
-  };
-});
+  }
+})

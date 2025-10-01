@@ -1,8 +1,8 @@
-import { MODULE } from "./constants.js";
+import { MODULE } from './constants.js'
 
-export let Utils = null;
+export let Utils = null
 
-Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
+Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
   /**
    * Utility functions
    */
@@ -13,14 +13,14 @@ Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
      * @param {string=null} defaultValue The default value
      * @returns {string}                 The setting value
      */
-    static getSetting(key, defaultValue = null) {
-      let value = defaultValue ?? null;
+    static getSetting (key, defaultValue = null) {
+      let value = defaultValue ?? null
       try {
-        value = game.settings.get(MODULE.ID, key);
+        value = game.settings.get(MODULE.ID, key)
       } catch {
-        coreModule.api.Logger.debug(`Setting '${key}' not found`);
+        coreModule.api.Logger.debug(`Setting '${key}' not found`)
       }
-      return value;
+      return value
     }
 
     /**
@@ -28,19 +28,19 @@ Hooks.once("tokenActionHudCoreApiReady", async (coreModule) => {
      * @param {string} key   The key
      * @param {string} value The value
      */
-    static async setSetting(key, value) {
+    static async setSetting (key, value) {
       try {
-        value = await game.settings.set(MODULE.ID, key, value);
-        coreModule.api.Logger.debug(`Setting '${key}' set to '${value}'`);
+        value = await game.settings.set(MODULE.ID, key, value)
+        coreModule.api.Logger.debug(`Setting '${key}' set to '${value}'`)
       } catch {
-        coreModule.api.Logger.debug(`Setting '${key}' not found`);
+        coreModule.api.Logger.debug(`Setting '${key}' not found`)
       }
     }
 
-    static toPascalCase(str) {
+    static toPascalCase (str) {
       return str
         .toLowerCase()
-        .replace(/(?:^|\s|_|\-)(\w)/g, (_, c) => (c ? c.toUpperCase() : ""));
+        .replace(/(^|\s)(\p{L})/gu, (match, sep, ch) => sep + ch.toUpperCase())
     }
-  };
-});
+  }
+})

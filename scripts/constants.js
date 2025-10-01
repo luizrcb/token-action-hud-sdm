@@ -2,65 +2,62 @@
  * Module-based constants
  */
 export const MODULE = {
-  ID: "token-action-hud-sdm",
-};
+  ID: 'token-action-hud-sdm'
+}
 
 /**
  * Core module
  */
 export const CORE_MODULE = {
-  ID: "token-action-hud-core",
-};
+  ID: 'token-action-hud-core'
+}
 
 /**
  * Core module version required by the system module
  */
-export const REQUIRED_CORE_MODULE_VERSION = "2.0.16";
+export const REQUIRED_CORE_MODULE_VERSION = '2.0.16'
 
 /**
  * Action types
  */
 export const ACTION_TYPE = {
-  ability: "Ability",
-  save: "Save",
-  attack: "Attack",
-  roll: "Roll",
-  item: "Item",
-  damage: "Damage",
-  power: "Power",
-  heroDice: "Hero Dice",
-};
+  ability: 'Ability',
+  save: 'Save',
+  attack: 'Attack',
+  roll: 'Roll',
+  item: 'Item',
+  damage: 'Damage',
+  power: 'Power',
+  heroDice: 'Hero Dice'
+}
 
 /**
  * Groups
  */
 export const GROUP = {
-  abilities: { id: "abilities", name: "Abilities", type: "system" },
-  saves: { id: "saves", name: "Saves", type: "system" },
-  attacks: { id: "attacks", name: "Attacks", type: "system" },
-  player: { id: "player", name: "Player", type: "system" },
-  npc: { id: "npc", name: "NPC", type: "system" },
-  //armor: { id: "armor", name: "Armor", type: "system" },
+  abilities: { id: 'abilities', name: 'SDM.FieldAbilitiesPl', type: 'system' },
+  saves: { id: 'saves', name: 'SDM.FieldSavePl', type: 'system' },
+  attacks: { id: 'attacks', name: 'SDM.FieldAttackPl', type: 'system' },
+  player: { id: 'player', name: 'TYPES.Actor.character', type: 'system' },
+  npc: { id: 'npc', name: 'TYPES.Actor.npc', type: 'system' },
+  caravan: { id: 'caravan', name: 'TYPES.Actor.caravan', type: 'system' },
   album: {
-    id: "power_album",
-    name: "Album of Power",
-    type: "system",
+    id: 'power_album',
+    name: 'TYPES.Item.power_album',
+    type: 'system'
   },
-  weapon: { id: "weapon", name: "Weapon", type: "system" },
- //  ward: { id: "ward", name: "Ward", type: "system" },
-  power: { id: "power", name: "Power", type: "system" },
+  weapon: { id: 'weapon', name: 'TYPES.Item.weapon', type: 'system' },
+  power: { id: 'power', name: 'TYPES.Item.power', type: 'system' },
 
-  combat: { id: "combat", name: "tokenActionHud.combat", type: "system" },
-  token: { id: "token", name: "tokenActionHud.token", type: "system" },
-};
+  combat: { id: 'combat', name: 'tokenActionHud.combat', type: 'system' },
+  token: { id: 'token', name: 'tokenActionHud.token', type: 'system' }
+}
 
 /**
  * Item types
  */
 export const ITEM_TYPE = {
-  power_album: { groupId: "power_album" },
-  // armor: { groupId: "armor" },
-  power: { groupId: "power" },
-  // ward: { groupId: "ward" },
-  weapon: { groupId: "weapon" },
-};
+  power_album: { groupId: 'power_album' },
+  power: { groupId: 'power' },
+  weapon: { groupId: 'weapon' }
+}

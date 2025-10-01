@@ -41,7 +41,7 @@
         "type": "system",
         "compatibility": [
           {
-            "minimum": "0.4.0",
+            "minimum": "0.4.1",
             "verified": "0.4.1"
           }
         ]
