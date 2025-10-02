@@ -42,7 +42,7 @@
         "compatibility": [
           {
             "minimum": "0.4.1",
-            "verified": "0.4.1"
+            "verified": "0.4.2"
           }
         ]
       }

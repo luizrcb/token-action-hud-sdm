@@ -380,6 +380,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             ? '<i class="fa fa-shield"></i>'
             : ''
 
+          const cssClass = `${brokenItem || runOutItem ? 'disabled' : ''} ${(itemData.system.readied || itemData.type === 'trait') ? 'active' : ''}`
+
           return {
             id,
             name,
@@ -387,7 +389,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             icon1,
             icon2,
             icon3,
-            cssClass: brokenItem || runOutItem ? 'disabled' : '',
+            cssClass,
             tooltip: itemData.getInventoryTitle(),
             listName,
             encodedValue

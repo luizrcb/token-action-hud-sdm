@@ -170,7 +170,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #handleRoll (event, actor, actionTypeId, actionId) {
       const isCtrl = !!event.ctrlKey
       const isShift = !!event.shiftKey
-      await actor.performHudAction(actionTypeId, actionId, {}, isShift, isCtrl)
+
+      await actor.performHudAction(actionTypeId, actionId, {
+        button: event.button
+      }, isShift, isCtrl)
     }
 
     async #handleConsumeSupplies (event, actor) {

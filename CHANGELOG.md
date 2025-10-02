@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.4
+
+- Forwards right-clicks to actor method that performs HUD action
+- Add active css style to readied items
+
 ## 0.1.3
 
 - Adds active effects to token action hud
