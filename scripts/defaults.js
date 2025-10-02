@@ -68,6 +68,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           { ...groups.power, nestId: 'inventory_power' },
           { ...groups.weapon, nestId: 'inventory_weapon' }
         ]
+      },
+      {
+        nestId: 'effects',
+        id: 'effects',
+        name: coreModule.api.Utils.i18n('SDM.TabEffects'),
+        settings: {
+          image: 'icons/magic/symbols/symbol-lightning-bolt.webp'
+        },
+        groups: [
+          { ...groups.effectsperm, nestId: 'effects_effectsperm' },
+          { ...groups.effectstemp, nestId: 'effects_effectstemp' }
+        ]
       }
       // {
       //   nestId: "utility",

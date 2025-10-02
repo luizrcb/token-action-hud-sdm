@@ -1,3 +1,21 @@
 #tooltip.tah-tooltip {
-    text-align: left;
+  text-align: left;
+}
+
+#token-action-hud-app.tah-style-custom
+  #token-action-hud
+  .tah-button-box.active {
+  /* background: var(--sdm-item-hover) !important; */
+  box-shadow:0 2px 0 -1px var(--sdm-c-accent), 0 0 0 1px var(--sdm-item-hover),
+    0 0 10px var(--sdm-c-accent) !important;
+}
+
+#token-action-hud-app.tah-style-custom
+  #token-action-hud
+  .tah-button-box:not(.disabled):active,
+#token-action-hud-app.tah-style-custom
+  #token-action-hud
+  .tah-button-box:not(.disabled):hover {
+  box-shadow: 0 2px 0 -1px var(--sdm-c-accent), 0 0 0 1px var(--sdm-item-hover),
+    0 0 10px var(--sdm-c-accent) !important;
 }

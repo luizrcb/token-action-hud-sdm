@@ -94,6 +94,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       case 'consumeSupplies':
         this.#handleConsumeSupplies(event, actor)
         break
+      case 'effects':
+        await this.#toggleStatus(event, actor, actionId)
+        break
       }
     }
 
@@ -172,6 +175,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
     async #handleConsumeSupplies (event, actor) {
       return await actor.consumeSupplies()
+    }
+
+    async #toggleStatus (event, actor, actionId) {
+      // if (event !== 'effects') {
+      //   const existsOnActor = this.token.actor.statuses.has(actionId.toLowerCase())
+      //   const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase())
+      //   data['flags.core.statusId'] = actionId.toLowerCase()
+      //   await this.token.toggleEffect(data, { active: !existsOnActor })
+      // } else {
+      const effect = actor.effects.filter(el => el.id === actionId)
+
+      if (event.button === 2 && effect.length) {
+        await effect[0].sheet.render(true)
+      } else {
+        await this.token.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect[0].disabled })
+      }
+      // }
+      Hooks.callAll('forceUpdateTokenActionHud')
     }
   }
 })

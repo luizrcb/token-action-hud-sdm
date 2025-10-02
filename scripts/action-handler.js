@@ -46,6 +46,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildAttacks()
       this.#buildCharacterOther()
       this.#buildInventory()
+      this.#buildEffects()
     }
 
     /**
@@ -57,6 +58,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildNPCombatActions()
       this.#buildNPCOther()
       this.#buildInventory()
+      this.#buildEffects()
     }
 
     async #buildAbilities () {
@@ -304,6 +306,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     async #buildCaravanActions () {
+      this.#buildEffects()
       const groupData = { id: 'caravan', type: 'system' }
 
       const actions = [
@@ -394,6 +397,35 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         // TAH Core method to add actions to the action list
         this.addActions(actions, groupData)
       }
+    }
+
+    async #buildEffects () {
+      const temporary = { id: 'effectstemp', type: 'system' }
+      const permanent = { id: 'effectsperm', type: 'system' }
+      let effects = Array.from(this.actor.effects)
+      const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
+      items.forEach(item => {
+        const _eff = Array.from(item.effects)
+        if (_eff.length > 0) {
+          const mergedEffects = [...new Set([...effects, ..._eff])]
+          effects = mergedEffects
+        }
+      })
+      effects.forEach(eff => {
+        let group = temporary
+        if (eff.isTemporary === false) {
+          group = permanent
+        }
+
+        this.addActions([{
+          id: 'ef' + eff.name,
+          name: eff.name,
+          img: eff.img,
+          cssClass: eff.disabled ? 'toggle' : 'togle active',
+          encodedValue: ['effects', eff.id].join(this.delimiter)
+
+        }], group)
+      })
     }
   }
 })

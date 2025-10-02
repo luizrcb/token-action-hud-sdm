@@ -41,6 +41,8 @@ export const GROUP = {
   player: { id: 'player', name: 'TYPES.Actor.character', type: 'system' },
   npc: { id: 'npc', name: 'TYPES.Actor.npc', type: 'system' },
   caravan: { id: 'caravan', name: 'TYPES.Actor.caravan', type: 'system' },
+  effectsperm: { id: 'effectsperm', name: 'SDM.Effect.Passive', type: 'system' },
+  effectstemp: { id: 'effectstemp', name: 'SDM.Effect.Temporary', type: 'system' },
   album: {
     id: 'power_album',
     name: 'TYPES.Item.power_album',

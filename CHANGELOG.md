@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.3
+
+- Adds active effects to token action hud
+
 ## 0.1.2
 
 - Adds images to action groups and colors to action icons
