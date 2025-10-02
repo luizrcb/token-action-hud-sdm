@@ -12,6 +12,16 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 - Unlock the HUD to customise layout and groups per user, and actions per actor.
 - Add your own macros, journal entries and roll table compendiums.
 
+### Token Action HUD SDM Interactions
+
+- **Left-Click (readied items)** → Item interaction, behaves as in the character sheet, supporting the same optional shortcuts:
+  - **+Ctrl** → Toggle blind GM roll
+  - **+Shift** → Skip or force custom roll dialog (depending on your system settings for the shift key)
+- **Left-Click (active effects)** → Toggle effect between active and inactive states
+- **Alt + Left-Click** → Toggle item readied (equipped) status
+- **Alt + Right-Click** → Share item to chat
+- **Right-Click** → Open item or active effect sheet
+
 ## Installation
 
 ### Method 1
