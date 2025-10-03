@@ -408,9 +408,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       if (this.items.size === 0) return
       const groupData = { id: 'wallet', type: 'system' }
       const itemList = Array.from(this.items.values())
-      console.log(itemList)
       const currencyItems = itemList.filter(i => i.system.size.unit === 'cash')
-      console.log(currencyItems)
       // Get actions
       const actions = currencyItems.map(item => {
         return {
