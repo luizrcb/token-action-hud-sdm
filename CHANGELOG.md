@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.6
+
+- Fix bug when multiple tokens are selected
+
 ## 0.1.5
 
 - Add Wealth tab with currency items

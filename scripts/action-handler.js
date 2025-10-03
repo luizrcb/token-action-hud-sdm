@@ -17,7 +17,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      */ a
     async buildSystemActions (groupIds) {
       // Set actor and token variables
-      this.actors = !this.actor ? this._getActors() : [this.actor]
+      this.actors = !this.actor ? this.#getActors() : [this.actor]
       this.actorType = this.actor?.type
 
       // Set items variable
@@ -33,6 +33,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         this.#buildNPCActions()
       } else if (this.actorType === 'caravan') {
         this.#buildCaravanActions()
+      }
+    }
+
+    #getActors () {
+      const allowedTypes = ['character', 'npc', 'caravan']
+      const actors = canvas.tokens.controlled
+        .filter((token) => token.actor)
+        .map((token) => token.actor)
+      if (actors.every((actor) => allowedTypes.includes(actor.type))) {
+        return actors
+      } else {
+        return []
       }
     }
 
@@ -194,7 +206,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         {
           id: `${this.actor.id}-melee`,
           name: coreModule.api.Utils.i18n('SDM.AttackMelee'),
-          icon1: '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
+          icon1:
+            '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
           listName: 'Attack: Melee',
           encodedValue: 'attack|melee'
         },
@@ -240,9 +253,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         },
         {
           id: `${this.actor.id}-hero-dice`,
-          name: `${Utils.toPascalCase(coreModule.api.Utils.i18n('SDM.HeroDice'))}: ${heroDice.value}/${heroDice.max}`,
+          name: `${Utils.toPascalCase(
+            coreModule.api.Utils.i18n('SDM.HeroDice')
+          )}: ${heroDice.value}/${heroDice.max}`,
           icon1: '<i class="fa-solid fa-dice-d6"></i>',
-          tooltip: Utils.toPascalCase(coreModule.api.Utils.i18n('SDM.HeroDice')),
+          tooltip: Utils.toPascalCase(
+            coreModule.api.Utils.i18n('SDM.HeroDice')
+          ),
           listName: 'Other: Hero Dice',
           encodedValue: 'heroichealing|heroichealing'
         }
@@ -256,16 +273,25 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const attackActions = [
         {
           id: `${this.actor.id}-attack`,
-          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
-          tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Attack') }),
-          icon1: '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
+          name: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.Attack')
+          }),
+          tooltip: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.Attack')
+          }),
+          icon1:
+            '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
           listName: 'attack: Attack Roll',
           encodedValue: 'attack|attack'
         },
         {
           id: `${this.actor.id}-damage`,
-          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
-          tooltip: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Damage') }),
+          name: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.Damage')
+          }),
+          tooltip: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.Damage')
+          }),
           icon1: '<i class="fa-solid fa-explosion azure"></i>',
           listName: 'Damage: rollNPCDamage',
           encodedValue: 'rollNPCDamage|rollNPCDamage'
@@ -278,8 +304,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const saveActions = [
         {
           id: `${this.actor.id}-save`,
-          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.FieldSaveTarget') }),
-          tooltip: game.i18n.format('SDM.SavingThrowRoll', { ability: coreModule.api.Utils.i18n('TYPES.Actor.npc') }),
+          name: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.FieldSaveTarget')
+          }),
+          tooltip: game.i18n.format('SDM.SavingThrowRoll', {
+            ability: coreModule.api.Utils.i18n('TYPES.Actor.npc')
+          }),
           icon1: '<i class="fa fa-shield-cat plum"></i>',
           listName: 'attack: Attack Roll',
           encodedValue: 'save|npc'
@@ -297,7 +327,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const actions = [
         {
           id: `${this.actor.id}-morale`,
-          name: game.i18n.format('SDM.RollType', { type: coreModule.api.Utils.i18n('SDM.Morale') }),
+          name: game.i18n.format('SDM.RollType', {
+            type: coreModule.api.Utils.i18n('SDM.Morale')
+          }),
           icon1: '<i class="fa-solid fa-person-running rust"></i>',
           listName: 'Other: Morale',
           encodedValue: 'rollNPCMorale|rollNPCMorale'
@@ -379,11 +411,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               : resources === 'run_out'
                 ? '<i class="fa-solid fa-battery-empty"></i>'
                 : ''
-          const icon3 = (itemData.system.readied || itemData.type === 'trait')
-            ? '<i class="fa fa-shield"></i>'
-            : ''
+          const icon3 =
+            itemData.system.readied || itemData.type === 'trait'
+              ? '<i class="fa fa-shield"></i>'
+              : ''
 
-          const cssClass = `${brokenItem || runOutItem ? 'disabled' : ''} ${(itemData.system.readied || itemData.type === 'trait') ? 'active' : ''}`
+          const cssClass = `${brokenItem || runOutItem ? 'disabled' : ''} ${
+            itemData.system.readied || itemData.type === 'trait' ? 'active' : ''
+          }`
 
           return {
             id,
@@ -408,9 +443,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       if (this.items.size === 0) return
       const groupData = { id: 'wallet', type: 'system' }
       const itemList = Array.from(this.items.values())
-      const currencyItems = itemList.filter(i => i.system.size.unit === 'cash')
+      const currencyItems = itemList.filter(
+        (i) => i.system.size.unit === 'cash'
+      )
       // Get actions
-      const actions = currencyItems.map(item => {
+      const actions = currencyItems.map((item) => {
         return {
           id: item.id,
           name: item.getDefaultTitle(),
@@ -428,28 +465,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const temporary = { id: 'effectstemp', type: 'system' }
       const permanent = { id: 'effectsperm', type: 'system' }
       let effects = Array.from(this.actor.effects)
-      const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
-      items.forEach(item => {
+      const items = Array.from(
+        this.actor.items.filter((it) =>
+          ['edge', 'hindrance', 'ability'].includes(it.type)
+        )
+      )
+      items.forEach((item) => {
         const _eff = Array.from(item.effects)
         if (_eff.length > 0) {
           const mergedEffects = [...new Set([...effects, ..._eff])]
           effects = mergedEffects
         }
       })
-      effects.forEach(eff => {
+      effects.forEach((eff) => {
         let group = temporary
         if (eff.isTemporary === false) {
           group = permanent
         }
 
-        this.addActions([{
-          id: 'ef' + eff.name,
-          name: eff.name,
-          img: eff.img,
-          cssClass: eff.disabled ? 'toggle' : 'togle active',
-          encodedValue: ['effects', eff.id].join(this.delimiter)
-
-        }], group)
+        this.addActions(
+          [
+            {
+              id: 'ef' + eff.name,
+              name: eff.name,
+              img: eff.img,
+              cssClass: eff.disabled ? 'toggle' : 'togle active',
+              encodedValue: ['effects', eff.id].join(this.delimiter)
+            }
+          ],
+          group
+        )
       })
     }
   }
