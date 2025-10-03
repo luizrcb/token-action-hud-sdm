@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.5
+
+- Add Wealth tab with currency items
+
 ## 0.1.4
 
 - Forwards right-clicks to actor method that performs HUD action
