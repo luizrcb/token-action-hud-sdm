@@ -83,6 +83,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       case 'heroichealing':
       case 'rollNPCDamage':
       case 'rollNPCMorale':
+      case 'transferCash':
         this.#handleRoll(event, actor, actionTypeId, actionId)
         break
       case 'item':
@@ -181,12 +182,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     async #toggleStatus (event, actor, actionId) {
-      // if (event !== 'effects') {
-      //   const existsOnActor = this.token.actor.statuses.has(actionId.toLowerCase())
-      //   const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase())
-      //   data['flags.core.statusId'] = actionId.toLowerCase()
-      //   await this.token.toggleEffect(data, { active: !existsOnActor })
-      // } else {
       const effect = actor.effects.filter(el => el.id === actionId)
 
       if (event.button === 2 && effect.length) {

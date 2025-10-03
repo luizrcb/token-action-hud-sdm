@@ -47,6 +47,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildCharacterOther()
       this.#buildInventory()
       this.#buildEffects()
+      this.#buildWallet()
     }
 
     /**
@@ -59,6 +60,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildNPCOther()
       this.#buildInventory()
       this.#buildEffects()
+      this.#buildWallet()
     }
 
     async #buildAbilities () {
@@ -307,6 +309,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
     async #buildCaravanActions () {
       this.#buildEffects()
+      this.#buildWallet()
       const groupData = { id: 'caravan', type: 'system' }
 
       const actions = [
@@ -399,6 +402,28 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         // TAH Core method to add actions to the action list
         this.addActions(actions, groupData)
       }
+    }
+
+    async #buildWallet () {
+      if (this.items.size === 0) return
+      const groupData = { id: 'wallet', type: 'system' }
+      const itemList = Array.from(this.items.values())
+      console.log(itemList)
+      const currencyItems = itemList.filter(i => i.system.size.unit === 'cash')
+      console.log(currencyItems)
+      // Get actions
+      const actions = currencyItems.map(item => {
+        return {
+          id: item.id,
+          name: item.getDefaultTitle(),
+          img: coreModule.api.Utils.getImage(item),
+          tooltip: item.getInventoryTitle(),
+          listName: `TransferCash: ${item.id}`,
+          encodedValue: ['transferCash', item.id].join(this.delimiter)
+        }
+      })
+
+      this.addActions(actions, groupData)
     }
 
     async #buildEffects () {

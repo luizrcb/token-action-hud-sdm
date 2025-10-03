@@ -70,6 +70,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         ]
       },
       {
+        nestId: 'wallet',
+        id: 'wallet',
+        name: coreModule.api.Utils.i18n('SDM.FieldWealth'),
+        settings: {
+          image: 'icons/containers/bags/coinpouch-simple-leather-silver-brown.webp'
+        },
+        groups: [
+          { ...groups.wallet, nestId: 'wallet_wallet' }
+        ]
+      },
+      {
         nestId: 'effects',
         id: 'effects',
         name: coreModule.api.Utils.i18n('SDM.TabEffects'),
