@@ -241,6 +241,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
       // const data = this.actor.system;
       const heroDice = this.actor.system.hero_dice
+      const bloodDice = this.actor.system.blood_dice
+      const touristDice = this.actor.system.tourist_dice
       const groupData = { id: 'player', type: 'system' }
 
       const actions = [
@@ -254,16 +256,50 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         {
           id: `${this.actor.id}-hero-dice`,
           name: `${Utils.toPascalCase(
-            coreModule.api.Utils.i18n('SDM.HeroDice')
+            coreModule.api.Utils.i18n('SDM.HeroDicePl')
           )}: ${heroDice.value}/${heroDice.max}`,
           icon1: '<i class="fa-solid fa-dice-d6"></i>',
           tooltip: Utils.toPascalCase(
-            coreModule.api.Utils.i18n('SDM.HeroDice')
+            coreModule.api.Utils.i18n('SDM.HeroDicePl')
           ),
           listName: 'Other: Hero Dice',
           encodedValue: 'heroichealing|heroichealing'
         }
       ]
+
+      if (bloodDice.enabled) {
+        actions.push(
+          {
+            id: `${this.actor.id}-blood-dice`,
+            name: `${Utils.toPascalCase(
+              coreModule.api.Utils.i18n('SDM.BloodDicePl')
+            )}: ${bloodDice.value}/${bloodDice.max}`,
+            icon1: '<i class="fa-solid fa-dice-d6 blood"></i>',
+            tooltip: Utils.toPascalCase(
+              coreModule.api.Utils.i18n('SDM.BloodDicePl')
+            ),
+            listName: 'Other: Blood Dice',
+            encodedValue: 'bloodDiceRoll|bloodDiceRoll'
+          }
+        )
+      }
+
+      if (touristDice.enabled) {
+        actions.push(
+          {
+            id: `${this.actor.id}-tourist-dice`,
+            name: `${Utils.toPascalCase(
+              coreModule.api.Utils.i18n('SDM.TouristDicePl')
+            )}: ${touristDice.value}/${touristDice.max}`,
+            icon1: '<i class="fa-solid fa-dice-d6 pine"></i>',
+            tooltip: Utils.toPascalCase(
+              coreModule.api.Utils.i18n('SDM.TouristDicePl')
+            ),
+            listName: 'Other: Tourist Dice',
+            encodedValue: 'touristDiceRoll|touristDiceRoll'
+          }
+        )
+      }
 
       this.addActions(actions, groupData)
     }
@@ -464,31 +500,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #buildEffects () {
       const temporary = { id: 'effectstemp', type: 'system' }
       const permanent = { id: 'effectsperm', type: 'system' }
-      let effects = Array.from(this.actor.effects)
-      const items = Array.from(
-        this.actor.items.filter((it) =>
-          ['edge', 'hindrance', 'ability'].includes(it.type)
-        )
-      )
-      items.forEach((item) => {
-        const _eff = Array.from(item.effects)
-        if (_eff.length > 0) {
-          const mergedEffects = [...new Set([...effects, ..._eff])]
-          effects = mergedEffects
-        }
-      })
+
+      const effects = this.actor.getAllEffects()
+
       effects.forEach((eff) => {
         let group = temporary
         if (eff.isTemporary === false) {
           group = permanent
         }
 
+        const source = foundry.utils.fromUuidSync(eff.origin)?.name || ''
+
         this.addActions(
           [
             {
-              id: 'ef' + eff.name,
+              id: 'ef' + this.actor.id + eff.name,
               name: eff.name,
               img: eff.img,
+              tooltip: `${eff.name}: ${source}`,
               cssClass: eff.disabled ? 'toggle' : 'togle active',
               encodedValue: ['effects', eff.id].join(this.delimiter)
             }

@@ -81,6 +81,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       case 'attack':
       case 'reaction':
       case 'heroichealing':
+      case 'bloodDiceRoll':
+      case 'touristDiceRoll':
       case 'rollNPCDamage':
       case 'rollNPCMorale':
       case 'transferCash':
@@ -182,12 +184,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     async #toggleStatus (event, actor, actionId) {
-      const effect = actor.effects.filter(el => el.id === actionId)
+      const effect = actor.getAllEffects().find(el => el.id === actionId)
 
-      if (event.button === 2 && effect.length) {
-        await effect[0].sheet.render(true)
+      if (!effect) return
+
+      if (event.button === 2) {
+        await effect.sheet.render(true)
       } else {
-        await this.token.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect[0].disabled })
+        await effect.update({ disabled: !effect.disabled })
       }
       // }
       Hooks.callAll('forceUpdateTokenActionHud')
