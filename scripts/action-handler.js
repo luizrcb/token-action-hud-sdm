@@ -247,13 +247,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
       const actions = [
         {
-          id: `${this.actor.id}-reaction`,
-          name: coreModule.api.Utils.i18n('SDM.Reaction'),
-          icon1: '<i class="fa-solid fa-masks-theater sky"></i>',
-          listName: 'Other: Reaction',
-          encodedValue: 'reaction|reaction'
-        },
-        {
           id: `${this.actor.id}-hero-dice`,
           name: `${Utils.toPascalCase(
             coreModule.api.Utils.i18n('SDM.HeroDicePl')
@@ -264,11 +257,32 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           ),
           listName: 'Other: Hero Dice',
           encodedValue: 'heroichealing|heroichealing'
+        },
+        {
+          id: `${this.actor.id}-reaction`,
+          name: coreModule.api.Utils.i18n('SDM.Reaction'),
+          icon1: '<i class="fa-solid fa-masks-theater sky"></i>',
+          listName: 'Other: Reaction',
+          encodedValue: 'reaction|reaction'
+        },
+        {
+          id: `${this.actor.id}-corruption`,
+          name: coreModule.api.Utils.i18n('SDM.Corruption'),
+          icon1: '<i class="fa-solid fa-biohazard violet"></i>',
+          listName: 'Other: Corruption',
+          encodedValue: 'corruption|corruption'
+        },
+        {
+          id: `${this.actor.id}-defeat`,
+          name: coreModule.api.Utils.i18n('SDM.Defeat'),
+          icon1: '<i class="fa-solid fa-skull"></i>',
+          listName: 'Other: Defeat',
+          encodedValue: 'defeat|defeat'
         }
       ]
 
       if (bloodDice.enabled) {
-        actions.push(
+        actions.unshift(
           {
             id: `${this.actor.id}-blood-dice`,
             name: `${Utils.toPascalCase(
@@ -285,7 +299,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       }
 
       if (touristDice.enabled) {
-        actions.push(
+        actions.unshift(
           {
             id: `${this.actor.id}-tourist-dice`,
             name: `${Utils.toPascalCase(

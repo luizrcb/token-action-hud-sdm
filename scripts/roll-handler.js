@@ -77,14 +77,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #handleAction (event, actor, token, actionTypeId, actionId) {
       switch (actionTypeId) {
       case 'ability':
-      case 'save':
       case 'attack':
-      case 'reaction':
-      case 'heroichealing':
       case 'bloodDiceRoll':
-      case 'touristDiceRoll':
+      case 'corruption':
+      case 'defeat':
+      case 'heroichealing':
+      case 'reaction':
       case 'rollNPCDamage':
       case 'rollNPCMorale':
+      case 'save':
+      case 'touristDiceRoll':
       case 'transferCash':
         this.#handleRoll(event, actor, actionTypeId, actionId)
         break
