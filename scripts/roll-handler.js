@@ -133,7 +133,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           return await item.toggleReadied()
         }
 
-        if (!item.system.readied && item.type !== 'trait') {
+        if (!item.system.readied && (item.type !== 'trait' && item.type !== 'burden')) {
           return
         }
 

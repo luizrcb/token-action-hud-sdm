@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.0
+
+- Add support to power burdens in the inventory tab
+
 ## 0.1.6
 
 - Fix bug when multiple tokens are selected

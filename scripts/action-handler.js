@@ -462,12 +462,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ? '<i class="fa-solid fa-battery-empty"></i>'
                 : ''
           const icon3 =
-            itemData.system.readied || itemData.type === 'trait'
+            itemData.system.readied || (itemData.type === 'trait' || itemData.type === 'burden')
               ? '<i class="fa fa-shield"></i>'
               : ''
 
           const cssClass = `${brokenItem || runOutItem ? 'disabled' : ''} ${
-            itemData.system.readied || itemData.type === 'trait' ? 'active' : ''
+            itemData.system.readied || (itemData.type === 'trait' || itemData.type === 'burden') ? 'active' : ''
           }`
 
           return {
