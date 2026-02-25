@@ -76,31 +76,22 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      */
     async #handleAction (event, actor, token, actionTypeId, actionId) {
       switch (actionTypeId) {
-      case 'ability':
-      case 'attack':
-      case 'bloodDiceRoll':
-      case 'corruption':
-      case 'defeat':
-      case 'heroichealing':
-      case 'reaction':
-      case 'rollNPCDamage':
-      case 'rollNPCMorale':
-      case 'save':
-      case 'touristDiceRoll':
-      case 'transferCash':
-        this.#handleRoll(event, actor, actionTypeId, actionId)
-        break
       case 'item':
         this.#handleItemAction(event, actor, actionId)
         break
-        // case "utility":
-        //   this.#handleUtilityAction(token, actionId);
-        //   break;
+      // case "utility":
+      //   this.#handleUtilityAction(token, actionId);
+      //   break;
       case 'consumeSupplies':
         this.#handleConsumeSupplies(event, actor)
         break
+
       case 'effects':
         await this.#toggleStatus(event, actor, actionId)
+        break
+
+      default:
+        this.#handleRoll(event, actor, actionTypeId, actionId)
         break
       }
     }

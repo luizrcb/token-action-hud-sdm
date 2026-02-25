@@ -60,6 +60,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildInventory()
       this.#buildEffects()
       this.#buildWallet()
+      this.#buildPet()
     }
 
     /**
@@ -73,6 +74,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildInventory()
       this.#buildEffects()
       this.#buildWallet()
+      this.#buildPet()
     }
 
     async #buildAbilities () {
@@ -389,8 +391,35 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.addActions(actions, groupData)
     }
 
+    async #buildPet () {
+      if (this.items.size === 0) return
+
+      const groupData = { id: 'pet', type: 'system' }
+      const itemList = Array.from(this.items.values())
+      const petItems = itemList.filter(
+        (i) => i.system.type === 'pet'
+      )
+
+      if (!petItems.length) return
+
+      // Get actions
+      const actions = petItems.map((item) => {
+        return {
+          id: item.id,
+          name: item.getDefaultTitle(),
+          img: coreModule.api.Utils.getImage(item),
+          tooltip: item.getInventoryTitle(),
+          listName: `openPetSheet: ${item.id}`,
+          encodedValue: ['openPetSheet', item.id].join(this.delimiter)
+        }
+      })
+
+      this.addActions(actions, groupData)
+    }
+
     async #buildCaravanActions () {
       this.#buildEffects()
+      this.#buildPet()
       this.#buildWallet()
       const groupData = { id: 'caravan', type: 'system' }
 

@@ -38,6 +38,7 @@ export const GROUP = {
   abilities: { id: 'abilities', name: 'SDM.FieldAbilitiesPl', type: 'system' },
   saves: { id: 'saves', name: 'SDM.FieldSavePl', type: 'system' },
   attacks: { id: 'attacks', name: 'SDM.FieldAttackPl', type: 'system' },
+  pet: { id: 'pet', name: 'TYPES.Item.pet', type: 'system' },
   player: { id: 'player', name: 'TYPES.Actor.character', type: 'system' },
   npc: { id: 'npc', name: 'TYPES.Actor.npc', type: 'system' },
   caravan: { id: 'caravan', name: 'TYPES.Actor.caravan', type: 'system' },

@@ -57,6 +57,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         ]
       },
       {
+        nestId: 'pet',
+        id: 'pet',
+        settings: {
+          image: 'icons/creatures/mammals/cat-hunched-glowing-red.webp',
+        },
+        name: coreModule.api.Utils.i18n('TYPES.Item.pet'),
+        groups: [{ ...groups.pet, nestId: 'pet_pet' }]
+      },
+      {
         nestId: 'inventory',
         id: 'inventory',
         name: coreModule.api.Utils.i18n('SDM.TabInventory'),
