@@ -3,7 +3,7 @@
   "title": "Token Action HUD SDM",
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
-     {
+    {
       "name": "Luber",
       "discord": "luizbertoni",
       "email": "luizrcb@gmail.com",
@@ -18,14 +18,9 @@
     "minimum": "13",
     "verified": "13"
   },
-  "esmodules": [
-    "./scripts/token-action-hud-sdm.min.js"
-  ],
-  "scripts": [
-  ],
-  "styles": [
-    "./styles/tah-sdm-style.css"
-  ],
+  "esmodules": ["./scripts/token-action-hud-sdm.min.js"],
+  "scripts": [],
+  "styles": ["./styles/tah-sdm-style.css"],
   "languages": [
     {
       "lang": "en",
