@@ -42,7 +42,7 @@
         "compatibility": [
           {
             "minimum": "0.12.0",
-            "verified": "0.12.2"
+            "verified": "0.17.2"
           }
         ]
       }
@@ -54,8 +54,7 @@
         "compatibility": [
           {
             "minimum": "2.0.16",
-            "verified": "2.0.16",
-            "maximum": "2.0.99"
+            "verified": "2.1.1"
           }
         ]
       }
