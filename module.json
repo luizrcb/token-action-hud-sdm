@@ -16,7 +16,7 @@
   "version": "#{VERSION}#",
   "compatibility": {
     "minimum": "13",
-    "verified": "13"
+    "verified": "14"
   },
   "esmodules": ["./scripts/token-action-hud-sdm.min.js"],
   "scripts": [],
@@ -36,8 +36,8 @@
         "type": "system",
         "compatibility": [
           {
-            "minimum": "0.12.0",
-            "verified": "0.17.2"
+            "minimum": "0.17.2",
+            "verified": "1.0.0"
           }
         ]
       }
