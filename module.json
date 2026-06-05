@@ -12,7 +12,9 @@
   ],
   "url": "https://github.com/luizrcb/token-action-hud-sdm",
   "bugs": "https://github.com/luizrcb/token-action-hud-sdm/issues",
-  "flags": {},
+  "flags": {
+    "allowBugReporter": true
+  },
   "version": "#{VERSION}#",
   "compatibility": {
     "minimum": "13",
