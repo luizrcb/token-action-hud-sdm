@@ -1,4 +1,4 @@
-# Token Action HUD SDM
+# Token Action HUD WTF
 
 ![](https://img.shields.io/badge/Foundry-v13-informational) [![Report Bugs](https://img.shields.io/badge/Report%20Bugs%20on%20GitHub-2dba4e?logo=GitHub&amp;logoColor=white)](https://github.com/luizrcb/token-action-hud-sdm/issues)
 
@@ -12,7 +12,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 - Unlock the HUD to customise layout and groups per user, and actions per actor.
 - Add your own macros, journal entries and roll table compendiums.
 
-### Token Action HUD SDM Interactions
+### Token Action HUD WTF Interactions
 
 - **Left-Click (readied items)** → Item interaction, behaves as in the character sheet, supporting the same optional shortcuts:
   - **+Ctrl** → Toggle blind GM roll
@@ -28,7 +28,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 
 1. On Foundry VTT's **Configuration and Setup** screen, go to **Add-on Modules**
 2. Click **Install Module**
-3. Search for **Token Action HUD SDM**
+3. Search for **Token Action HUD WTF**
 4. Click **Install** next to the module listing
 
 ### Method 2
@@ -40,7 +40,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 
 ## Required Modules
 
-**IMPORTANT** - Token Action HUD SDM requires the [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) module to be installed.
+**IMPORTANT** - Token Action HUD WTF requires the [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) module to be installed.
 
 ### Recommended Modules
 

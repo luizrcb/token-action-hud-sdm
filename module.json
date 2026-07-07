@@ -1,6 +1,6 @@
 {
   "id": "token-action-hud-sdm",
-  "title": "Token Action HUD SDM",
+  "title": "Token Action HUD WTF",
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
     {
@@ -39,7 +39,7 @@
         "compatibility": [
           {
             "minimum": "0.17.2",
-            "verified": "1.0.0"
+            "verified": "1.1.2"
           }
         ]
       }
