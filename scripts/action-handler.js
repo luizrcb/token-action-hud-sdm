@@ -245,6 +245,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const heroDice = this.actor.system.hero_dice
       const bloodDice = this.actor.system.blood_dice
       const touristDice = this.actor.system.tourist_dice
+      const isDefeated = this.actor.statuses?.has('dead')
       const groupData = { id: 'player', type: 'system' }
 
       const actions = [
@@ -280,8 +281,25 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           icon1: '<i class="fa-solid fa-skull"></i>',
           listName: 'Other: Defeat',
           encodedValue: 'defeat|defeat'
+        },
+        {
+          id: `${this.actor.id}-groupChase`,
+          name: coreModule.api.Utils.i18n('SDM.GroupChase'),
+          icon1: '<i class="fa-solid fa-gauge-high pumpkin"></i>',
+          listName: 'Other: Group Chase',
+          encodedValue: 'groupChase|groupChase'
         }
       ]
+
+      if (isDefeated) {
+        actions.push({
+          id: `${this.actor.id}-relife`,
+          name: coreModule.api.Utils.i18n('SDM.Relife'),
+          icon1: '<i class="fa-solid fa-kit-medical blood"></i>',
+          listName: 'Other: relife',
+          encodedValue: 'relife|relife'
+        })
+      }
 
       if (bloodDice.enabled) {
         actions.unshift(

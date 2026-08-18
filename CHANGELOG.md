@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.0
+
+- Add support to groupo chase and relife rolls
+
 ## 0.3.1
 
 - Add support to power burdens in the inventory tab
