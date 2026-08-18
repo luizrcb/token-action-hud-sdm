@@ -1,8 +1,12 @@
 # CHANGELOG
 
-## 0.4.0
+## 0.5.0
 
 - Add support to groupo chase and relife rolls
+  
+## 0.4.0
+
+- v14 support
 
 ## 0.3.1
 
