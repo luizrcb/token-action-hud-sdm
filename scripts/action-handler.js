@@ -673,6 +673,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #buildCounters () {
       const api = this.#sdmApi
       if (!api) return
+      // The GM can turn counters off (Core Rules settings)
+      try {
+        if (game.settings.get('sdm', 'enableCounters') === false) return
+      } catch {}
       const actions = []
       const add = (doc, docKey, img) => {
         for (const counter of api.counters.get(doc)) {
