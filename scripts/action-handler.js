@@ -58,6 +58,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildAttacks()
       this.#buildCharacterOther()
       this.#buildInventory()
+      this.#buildFeatureRolls()
+      this.#buildConsumables()
+      this.#buildLights()
+      this.#buildCounters()
       this.#buildEffects()
       this.#buildWallet()
       this.#buildPet()
@@ -72,6 +76,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildNPCombatActions()
       this.#buildNPCOther()
       this.#buildInventory()
+      this.#buildFeatureRolls()
+      this.#buildConsumables()
+      this.#buildLights()
+      this.#buildCounters()
       this.#buildEffects()
       this.#buildWallet()
       this.#buildPet()
@@ -291,6 +299,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
       ]
 
+      const rest = this.#restAction()
+      if (rest) actions.push(rest)
+
       if (isDefeated) {
         actions.push({
           id: `${this.actor.id}-relife`,
@@ -406,6 +417,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
       ]
 
+      const rest = this.#restAction()
+      if (rest) actions.push(rest)
+
       this.addActions(actions, groupData)
     }
 
@@ -436,6 +450,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     async #buildCaravanActions () {
+      this.#buildCounters()
       this.#buildEffects()
       this.#buildPet()
       this.#buildWallet()
@@ -534,6 +549,148 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         // TAH Core method to add actions to the action list
         this.addActions(actions, groupData)
       }
+    }
+
+    /** The system's API for the features below (WTF 1.11.0+); null on older versions. */
+    get #sdmApi () {
+      const api = game.system?.api ?? game.sdm?.api
+      return api?.items && api?.lights && api?.counters ? api : null
+    }
+
+    /** Rest (one week), from the system's rest API. */
+    #restAction () {
+      const api = game.system?.api ?? game.sdm?.api
+      if (typeof api?.rest !== 'function') return null
+      return {
+        id: `${this.actor.id}-rest`,
+        name: coreModule.api.Utils.i18n('SDM.Rest.Title'),
+        icon1: '<i class="fa-solid fa-bed"></i>',
+        tooltip: coreModule.api.Utils.i18n('SDM.Rest.Tooltip'),
+        listName: 'Other: Rest',
+        encodedValue: ['rest', 'rest'].join(this.delimiter)
+      }
+    }
+
+    /**
+     * Rolls that item features add (a sword with the album feature, an album with the weapon
+     * feature…): listed in the weapon / power album groups next to the subtype rolls.
+     */
+    async #buildFeatureRolls () {
+      if (!this.items?.size) return
+      const groups = { damage: 'weapon', power_album: 'power_album' }
+      const actionsByGroup = { weapon: [], power_album: [] }
+      for (const [itemId, item] of this.items) {
+        if (item.type !== 'gear') continue
+        const system = item.system
+        const has = (feature) => !!system.features?.has?.(feature)
+        const kinds = []
+        if (system.type !== 'weapon' && has('weapon') && system.weapon?.damage?.base) kinds.push('damage')
+        if (system.type !== 'power_album' && has('album') && (system.powers?.length ?? 0) > 0) kinds.push('power_album')
+        for (const kind of kinds) {
+          const blocked = system.status === 'broken' || system.resources === 'run_out'
+          const label = coreModule.api.Utils.i18n(kind === 'damage' ? 'SDM.Damage' : 'SDM.PowerAlbum')
+          actionsByGroup[groups[kind]].push({
+            id: `${itemId}-${kind}`,
+            name: item.getNameTitle(),
+            img: coreModule.api.Utils.getImage(item),
+            icon1: kind === 'damage' ? '<i class="fa-solid fa-sword"></i>' : '<i class="fa-solid fa-book"></i>',
+            icon3: system.readied ? '<i class="fa fa-shield"></i>' : '',
+            cssClass: `${blocked ? 'disabled' : ''} ${system.readied ? 'active' : ''}`,
+            tooltip: game.i18n.format('SDM.RollType', { type: label }),
+            listName: `${label}: ${item.name}`,
+            encodedValue: ['itemRoll', `${kind}:${itemId}`].join(this.delimiter)
+          })
+        }
+      }
+      for (const [groupId, actions] of Object.entries(actionsByGroup)) {
+        if (actions.length) this.addActions(actions, { id: groupId, type: 'system' })
+      }
+    }
+
+    /** Consumables: Use (restores life / abilities, applies effects; the system asks what). */
+    async #buildConsumables () {
+      const api = this.#sdmApi
+      if (!api || !this.items?.size) return
+      const actions = []
+      for (const [itemId, item] of this.items) {
+        if (!api.items.isUsable(item)) continue
+        const blocked = !!api.items.useBlockedReason(item)
+        const resources = item.system.resources
+        actions.push({
+          id: `${itemId}-use`,
+          name: item.getNameTitle(),
+          img: coreModule.api.Utils.getImage(item),
+          icon1: '<i class="fa-solid fa-hand-holding-medical"></i>',
+          icon2:
+            resources === 'running_low'
+              ? '<i class="fa-solid fa-battery-quarter"></i>'
+              : resources === 'run_out'
+                ? '<i class="fa-solid fa-battery-empty"></i>'
+                : '',
+          cssClass: blocked ? 'disabled' : '',
+          tooltip: item.getInventoryTitle(),
+          listName: `Use: ${item.name}`,
+          encodedValue: ['useItem', itemId].join(this.delimiter)
+        })
+      }
+      if (actions.length) this.addActions(actions, { id: 'consumables', type: 'system' })
+    }
+
+    /** Light: items that can light (click to light / put out) and a power's light (put out). */
+    async #buildLights () {
+      const api = this.#sdmApi
+      if (!api) return
+      const actions = api.lights.items(this.actor).map((item) => {
+        const lit = api.lights.isLit(item)
+        return {
+          id: `${item.id}-light`,
+          name: item.name,
+          img: coreModule.api.Utils.getImage(item),
+          icon1: '<i class="fa-solid fa-fire-flame-curved"></i>',
+          cssClass: lit ? 'toggle active' : 'toggle',
+          tooltip: coreModule.api.Utils.i18n(lit ? 'SDM.Light.PutOut' : 'SDM.Light.Light'),
+          listName: `Light: ${item.name}`,
+          encodedValue: ['light', item.id].join(this.delimiter)
+        }
+      })
+      const lit = api.lights.litEffect(this.actor)
+      if (lit && !lit.getFlag('sdm', 'light')?.itemId) {
+        actions.unshift({
+          id: `${this.actor.id}-power-light`,
+          name: lit.name,
+          img: lit.img,
+          icon1: '<i class="fa-solid fa-fire-flame-curved"></i>',
+          cssClass: 'toggle active',
+          tooltip: coreModule.api.Utils.i18n('SDM.Light.PutOut'),
+          listName: `Light: ${lit.name}`,
+          encodedValue: ['light', 'effect'].join(this.delimiter)
+        })
+      }
+      if (actions.length) this.addActions(actions, { id: 'lights', type: 'system' })
+    }
+
+    /** Counters of the actor and of its items: click +1, right-click −1. */
+    async #buildCounters () {
+      const api = this.#sdmApi
+      if (!api) return
+      const actions = []
+      const add = (doc, docKey, img) => {
+        for (const counter of api.counters.get(doc)) {
+          const max = counter.max !== null && counter.max !== undefined ? `/${counter.max}` : ''
+          actions.push({
+            id: `${docKey}-counter-${counter.key}`,
+            name: `${counter.label} ${counter.value}${max}`,
+            img,
+            icon1: '<i class="fa-solid fa-hashtag"></i>',
+            tooltip: game.i18n.format('SDM.Counter.RowHint', { label: counter.label }),
+            listName: `Counter: ${counter.label}`,
+            encodedValue: ['counter', `${docKey}:${counter.key}`].join(this.delimiter)
+          })
+        }
+      }
+      add(this.actor, 'actor', null)
+      for (const [itemId, item] of this.items ?? []) add(item, itemId, coreModule.api.Utils.getImage(item))
+      if (actions.length) this.addActions(actions, { id: 'counters', type: 'system' })
     }
 
     async #buildWallet () {

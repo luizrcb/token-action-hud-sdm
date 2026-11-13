@@ -90,6 +90,26 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         await this.#toggleStatus(event, actor, actionId)
         break
 
+      case 'itemRoll':
+        await this.#handleFeatureRoll(event, actor, actionId)
+        break
+
+      case 'useItem':
+        await this.#sdmApi?.items.use(actor.items.get(actionId))
+        break
+
+      case 'light':
+        await this.#handleLight(actor, actionId)
+        break
+
+      case 'counter':
+        await this.#handleCounter(event, actor, actionId)
+        break
+
+      case 'rest':
+        await (game.system?.api ?? game.sdm?.api)?.rest?.(actor)
+        break
+
       default:
         this.#handleRoll(event, actor, actionTypeId, actionId)
         break
@@ -162,6 +182,49 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     //       break;
     //   }
     // }
+
+    /** The system's API (WTF 1.11.0+). */
+    get #sdmApi () {
+      const api = game.system?.api ?? game.sdm?.api
+      return api?.items && api?.lights && api?.counters ? api : null
+    }
+
+    /** A roll an item feature adds ("damage:<id>" or "power_album:<id>"). */
+    async #handleFeatureRoll (event, actor, actionId) {
+      const [kind, itemId] = actionId.split(':')
+      const item = actor.items.get(itemId)
+      if (!item) return
+      if (event.button === 2) return item.sheet.render({ force: true })
+      if (item.system.status === 'broken' || item.system.resources === 'run_out') return
+      if (event.altKey) return item.toggleReadied()
+      if (!item.system.readied) return
+      const label = coreModule.api.Utils.i18n(kind === 'damage' ? 'SDM.Damage' : 'SDM.PowerAlbum')
+      await actor.performHudAction(
+        kind,
+        itemId,
+        { label: item.name, tooltip: game.i18n.format('SDM.RollType', { type: label }) },
+        !!event.shiftKey,
+        !!event.ctrlKey
+      )
+    }
+
+    /** Light or put out an item's light; "effect": put out a power's light. */
+    async #handleLight (actor, actionId) {
+      const api = this.#sdmApi
+      if (!api) return
+      if (actionId === 'effect') return api.lights.putOut(actor)
+      const item = actor.items.get(actionId)
+      if (item) await api.lights.toggle(item)
+    }
+
+    /** Counter "<actor|itemId>:<key>": click +1, right-click −1. */
+    async #handleCounter (event, actor, actionId) {
+      const api = this.#sdmApi
+      if (!api) return
+      const [docKey, key] = actionId.split(':')
+      const doc = docKey === 'actor' ? actor : actor.items.get(docKey)
+      if (doc) await api.counters.step(doc, key, event.button === 2 ? -1 : 1)
+    }
 
     async #handleRoll (event, actor, actionTypeId, actionId) {
       const isCtrl = !!event.ctrlKey

@@ -53,7 +53,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         groups: [
           { ...groups.player, nestId: 'other_player' },
           { ...groups.caravan, nestId: 'other_caravan' },
-          { ...groups.npc, nestId: 'other_npc' }
+          { ...groups.npc, nestId: 'other_npc' },
+          { ...groups.counters, nestId: 'other_counters' }
         ]
       },
       {
@@ -75,7 +76,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         groups: [
           { ...groups.album, nestId: 'inventory_album' },
           { ...groups.power, nestId: 'inventory_power' },
-          { ...groups.weapon, nestId: 'inventory_weapon' }
+          { ...groups.weapon, nestId: 'inventory_weapon' },
+          { ...groups.consumables, nestId: 'inventory_consumables' },
+          { ...groups.lights, nestId: 'inventory_lights' }
         ]
       },
       {

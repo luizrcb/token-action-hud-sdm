@@ -51,6 +51,9 @@ export const GROUP = {
   },
   weapon: { id: 'weapon', name: 'TYPES.Item.weapon', type: 'system' },
   power: { id: 'power', name: 'TYPES.Item.power', type: 'system' },
+  consumables: { id: 'consumables', name: 'tokenActionHud.sdm.consumables', type: 'system' },
+  lights: { id: 'lights', name: 'SDM.Light.Label', type: 'system' },
+  counters: { id: 'counters', name: 'SDM.Counter.Title', type: 'system' },
   wallet: { id: 'wallet', name: 'SDM.FieldWealth', type: 'system' },
   combat: { id: 'combat', name: 'tokenActionHud.combat', type: 'system' },
   token: { id: 'token', name: 'tokenActionHud.token', type: 'system' }
