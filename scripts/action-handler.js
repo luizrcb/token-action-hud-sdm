@@ -509,7 +509,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           const resources = itemData.system.resources
 
           const brokenItem = status === 'broken'
-          const runOutItem = resources === 'run_out'
+          // Run out, unless the item still rolls its damage when run out
+          const runOutItem = resources === 'run_out' && !itemData.system.works_when_run_out
 
           const icon1 =
             status === 'notched'

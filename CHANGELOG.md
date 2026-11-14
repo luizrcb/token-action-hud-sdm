@@ -9,6 +9,7 @@ Uses the new features of WTF 1.11.0 (older system versions keep working without 
 - Light group: light or put out items with the light category or glowing feature; put out a power's light (hidden when the GM turns *Item lights* off)
 - Counters group (under Other): the actor's and its items' counters — click +1, right-click −1
 - Rest (one week) in the character and NPC *Other* groups
+- A run-out item with *Damage when run out* stays active and rolls its damage
 - Existing HUD layouts may need *Reset layout* in the HUD settings to show the new groups
 
 ## 0.5.0
