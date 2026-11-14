@@ -6,7 +6,7 @@ Uses the new features of WTF 1.11.0 (older system versions keep working without 
 
 - Rolls from item features: gear with the *weapon* feature appears in Weapons (damage) and gear with the *album* feature in Power Albums
 - Consumables group: *Use* a consumable (the system asks what to restore / apply; targets, else selected tokens, else yourself)
-- Light group: light or put out items with the light category or glowing feature; put out a power's light
+- Light group: light or put out items with the light category or glowing feature; put out a power's light (hidden when the GM turns *Item lights* off)
 - Counters group (under Other): the actor's and its items' counters — click +1, right-click −1
 - Rest (one week) in the character and NPC *Other* groups
 - Existing HUD layouts may need *Reset layout* in the HUD settings to show the new groups

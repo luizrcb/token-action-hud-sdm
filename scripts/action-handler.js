@@ -640,6 +640,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #buildLights () {
       const api = this.#sdmApi
       if (!api) return
+      // The GM can turn item lights off (Core Rules settings)
+      try {
+        if (game.settings.get('sdm', 'enableItemLights') === false) return
+      } catch {}
       const actions = api.lights.items(this.actor).map((item) => {
         const lit = api.lights.isLit(item)
         return {
