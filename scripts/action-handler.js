@@ -211,7 +211,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       if (!this.actor) return
 
       // Same colors as the character sheet (V2): each attack takes the color of its configured ability
-      const abilityIconColor = { str: 'rust', end: 'pumpkin', agi: 'amber', cha: 'lime', aur: 'azure', tho: 'heart' }
+      const abilityIconColor = Object.fromEntries(CONFIG.SDM.abilitiesKeys.map((key, i) => [key, CONFIG.SDM.abilityColors[i]]))
       const system = this.actor.system ?? {}
       const color = (attack, fallback) =>
         abilityIconColor[system[attack]?.default_ability || fallback] ?? abilityIconColor[fallback]
