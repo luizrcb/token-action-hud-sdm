@@ -210,35 +210,39 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     async #buildAttacks () {
       if (!this.actor) return
 
-      // const abilities = data.abilities;
+      // Same colors as the character sheet (V2): each attack takes the color of its configured ability
+      const abilityIconColor = { str: 'rust', end: 'pumpkin', agi: 'amber', cha: 'lime', aur: 'azure', tho: 'heart' }
+      const system = this.actor.system ?? {}
+      const color = (attack, fallback) =>
+        abilityIconColor[system[attack]?.default_ability || fallback] ?? abilityIconColor[fallback]
       const groupData = { id: 'attacks', type: 'system' }
       const actions = [
         {
           id: `${this.actor.id}-melee`,
           name: coreModule.api.Utils.i18n('SDM.AttackMelee'),
           icon1:
-            '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
+            `<i class="melee-attack ${color('melee', 'str')}" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>`,
           listName: 'Attack: Melee',
           encodedValue: 'attack|melee'
         },
         {
           id: `${this.actor.id}-ranged`,
           name: coreModule.api.Utils.i18n('SDM.AttackRanged'),
-          icon1: '<i class="fa-solid fa-gun pine"></i>',
+          icon1: `<i class="fa-solid fa-gun ${color('ranged', 'agi')}"></i>`,
           listName: 'Attack: Ranged',
           encodedValue: 'attack|ranged'
         },
         {
           id: `${this.actor.id}-fantascience`,
           name: coreModule.api.Utils.i18n('SDM.AttackFantascience'),
-          icon1: '<i class="fa-solid fa-hat-wizard heart"></i>',
+          icon1: `<i class="fa-solid fa-hat-wizard ${color('fantascience', 'cha')}"></i>`,
           listName: 'Attack: Fantascience',
           encodedValue: 'attack|fantascience'
         },
         {
           id: `${this.actor.id}-oldtech`,
           name: coreModule.api.Utils.i18n('SDM.AttackOldtech'),
-          icon1: '<i class="fa-solid fa-gamepad plum"></i>',
+          icon1: `<i class="fa-solid fa-gamepad ${color('oldtech', 'tho')}"></i>`,
           listName: 'Attack: Oldtech',
           encodedValue: 'attack|oldtech'
         }

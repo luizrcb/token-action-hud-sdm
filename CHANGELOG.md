@@ -10,6 +10,7 @@ Uses the new features of WTF 1.11.0 (older system versions keep working without 
 - Counters group (under Other): the actor's and its items' counters — click +1, right-click −1
 - Rest (one week) in the character and NPC *Other* groups
 - A run-out item with *Damage when run out* stays active and rolls its damage
+- Attack icons use the same colors as the character sheet: each attack takes the color of the ability it is set to roll with
 - Existing HUD layouts may need *Reset layout* in the HUD settings to show the new groups
 
 ## 0.5.0
