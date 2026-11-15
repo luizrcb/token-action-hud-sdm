@@ -221,7 +221,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           id: `${this.actor.id}-melee`,
           name: coreModule.api.Utils.i18n('SDM.AttackMelee'),
           icon1:
-            `<i class="melee-attack ${color('melee', 'str')}" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>`,
+            `<i class="fa-solid fa-sword ${color('melee', 'str')}"></i>`,
           listName: 'Attack: Melee',
           encodedValue: 'attack|melee'
         },
@@ -364,8 +364,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           tooltip: game.i18n.format('SDM.RollType', {
             type: coreModule.api.Utils.i18n('SDM.Attack')
           }),
-          icon1:
-            '<i class="melee-attack lime" style="width: 12px; height: 12px; margin-top: 3px; padding: 0"></i>',
+          // Same icon as the NPC sheet (V2)
+          icon1: '<i class="fa-solid fa-sword lime"></i>',
           listName: 'attack: Attack Roll',
           encodedValue: 'attack|attack'
         },
