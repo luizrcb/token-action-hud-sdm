@@ -612,13 +612,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       }
     }
 
-    /** Consumables: Use (restores life / abilities, applies effects; the system asks what). */
+    /** Consumables: Use (restores life / abilities, applies effects; the system asks what). Readied ones only. */
     async #buildConsumables () {
       const api = this.#sdmApi
       if (!api || !this.items?.size) return
       const actions = []
       for (const [itemId, item] of this.items) {
-        if (!api.items.isUsable(item)) continue
+        // Only readied: a packed item takes an action to ready first
+        if (!api.items.isUsable(item) || !item.system?.readied) continue
         const blocked = !!api.items.useBlockedReason(item)
         const resources = item.system.resources
         actions.push({
