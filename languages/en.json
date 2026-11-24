@@ -4,6 +4,7 @@
       "armor": "Armor",
       "containers": "Containers",
       "consumables": "Consumables",
+      "itemActions": "Item actions",
       "equipment": "Equipment",
       "inventory": "Inventory",
       "other": "Other",

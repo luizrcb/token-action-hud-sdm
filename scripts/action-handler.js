@@ -61,6 +61,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildFeatureRolls()
       this.#buildConsumables()
       this.#buildLights()
+      this.#buildItemActions()
       this.#buildCounters()
       this.#buildEffects()
       this.#buildWallet()
@@ -79,6 +80,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildFeatureRolls()
       this.#buildConsumables()
       this.#buildLights()
+      this.#buildItemActions()
       this.#buildCounters()
       this.#buildEffects()
       this.#buildWallet()
@@ -516,12 +518,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           // Run out, unless the item still rolls its damage when run out
           const runOutItem = resources === 'run_out' && !itemData.system.works_when_run_out
 
+          // The system's row markers (WTF 1.12+): single use, lit, a hallmark upgrade to choose
+          const markers = this.#sdmApi?.items?.markers?.(itemData) ?? {}
           const icon1 =
-            status === 'notched'
+            (status === 'notched'
               ? '<i class="fa fa-hammer"></i>'
               : status === 'broken'
                 ? '<i class="fa fa-ban"></i>'
-                : ''
+                : '') +
+            (markers.singleUse ? '<i class="fa-solid fa-hourglass-end"></i>' : '') +
+            (markers.lit ? '<i class="fa-solid fa-fire-flame-curved"></i>' : '') +
+            (markers.upgrade ? '<i class="fa-solid fa-star"></i>' : '')
           const icon2 =
             resources === 'running_low'
               ? '<i class="fa-solid fa-battery-quarter"></i>'
@@ -634,12 +641,37 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ? '<i class="fa-solid fa-battery-empty"></i>'
                 : '',
           cssClass: blocked ? 'disabled' : '',
-          tooltip: item.getInventoryTitle(),
+          // What Use does (the system's own tooltip), else the item's
+          tooltip: api.items.describeUse?.(item) ?? item.getInventoryTitle(),
           listName: `Use: ${item.name}`,
           encodedValue: ['useItem', itemId].join(this.delimiter)
         })
       }
       if (actions.length) this.addActions(actions, { id: 'consumables', type: 'system' })
+    }
+
+    /**
+     * Item actions besides rolls and Use, as the system's right-click menu: usage roll, ±1 charge,
+     * recharge, recharge with a hero die, animate / deanimate (or ask), a hallmark's upgrade.
+     */
+    async #buildItemActions () {
+      const api = this.#sdmApi
+      if (typeof api?.items?.actions !== 'function' || !this.items?.size) return
+      const actions = []
+      for (const [itemId, item] of this.items) {
+        for (const action of api.items.actions(item)) {
+          actions.push({
+            id: `${itemId}-${action.id}`,
+            name: item.name,
+            img: coreModule.api.Utils.getImage(item),
+            icon1: `<i class="${action.icon}"></i>`,
+            tooltip: action.label,
+            listName: `${action.label}: ${item.name}`,
+            encodedValue: ['itemAction', `${itemId}:${action.id}`].join(this.delimiter)
+          })
+        }
+      }
+      if (actions.length) this.addActions(actions, { id: 'itemActions', type: 'system' })
     }
 
     /** Light: items that can light (click to light / put out) and a power's light (put out). */

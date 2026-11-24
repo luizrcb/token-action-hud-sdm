@@ -110,6 +110,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         await (game.system?.api ?? game.sdm?.api)?.rest?.(actor)
         break
 
+      case 'itemAction': {
+        const [itemId, id] = actionId.split(':')
+        const item = actor.items.get(itemId)
+        const action = item ? (game.system?.api ?? game.sdm?.api)?.items?.actions?.(item)?.find((a) => a.id === id) : null
+        await action?.run()
+        break
+      }
+
       default:
         this.#handleRoll(event, actor, actionTypeId, actionId)
         break
