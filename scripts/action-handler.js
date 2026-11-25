@@ -61,6 +61,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildFeatureRolls()
       this.#buildConsumables()
       this.#buildLights()
+      this.#buildForms()
       this.#buildItemActions()
       this.#buildCounters()
       this.#buildEffects()
@@ -80,6 +81,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildFeatureRolls()
       this.#buildConsumables()
       this.#buildLights()
+      this.#buildForms()
       this.#buildItemActions()
       this.#buildCounters()
       this.#buildEffects()
@@ -528,6 +530,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 : '') +
             (markers.singleUse ? '<i class="fa-solid fa-hourglass-end"></i>' : '') +
             (markers.lit ? '<i class="fa-solid fa-fire-flame-curved"></i>' : '') +
+            (markers.form ? '<i class="fa-solid fa-paw"></i>' : '') +
             (markers.upgrade ? '<i class="fa-solid fa-star"></i>' : '')
           const icon2 =
             resources === 'running_low'
@@ -709,6 +712,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         })
       }
       if (actions.length) this.addActions(actions, { id: 'lights', type: 'system' })
+    }
+
+    /** Forms (WTF 1.12+): end the current form, or take one of the forms available. */
+    async #buildForms () {
+      const forms = this.#sdmApi?.forms
+      if (!forms) return
+      const i18n = coreModule.api.Utils.i18n
+      const current = forms.current(this.actor)
+      const actions = current
+        ? [{
+            id: `${this.actor.id}-form-end`,
+            name: current.name,
+            img: current.img || current.effect?.img,
+            icon1: '<i class="fa-solid fa-paw"></i>',
+            cssClass: 'toggle active',
+            tooltip: game.i18n.format('SDM.Form.EndNamed', { form: current.name }),
+            listName: `${i18n('SDM.Form.End')}: ${current.name}`,
+            encodedValue: ['form', 'end'].join(this.delimiter)
+          }]
+        : forms.available(this.actor).map((effect) => ({
+          id: `${effect.id}-form`,
+          name: effect.name,
+          img: effect.img,
+          icon1: '<i class="fa-solid fa-paw"></i>',
+          cssClass: 'toggle',
+          tooltip: game.i18n.format('SDM.Form.TakeNamed', { form: effect.name }),
+          listName: `${i18n('SDM.Form.Take')}: ${effect.name}`,
+          encodedValue: ['form', effect.uuid].join(this.delimiter)
+        }))
+      if (actions.length) this.addActions(actions, { id: 'forms', type: 'system' })
     }
 
     /** Counters of the actor and of its items: click +1, right-click −1. */

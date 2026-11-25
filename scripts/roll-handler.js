@@ -102,6 +102,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         await this.#handleLight(actor, actionId)
         break
 
+      case 'form':
+        await this.#handleForm(actor, actionId)
+        break
+
       case 'counter':
         await this.#handleCounter(event, actor, actionId)
         break
@@ -223,6 +227,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       if (actionId === 'effect') return api.lights.putOut(actor)
       const item = actor.items.get(actionId)
       if (item) await api.lights.toggle(item)
+    }
+
+    /** Form: "end" ends the current form, else the uuid of the form effect to take. */
+    async #handleForm (actor, actionId) {
+      const forms = this.#sdmApi?.forms
+      if (!forms) return
+      if (actionId === 'end') return forms.end(actor)
+      const effect = fromUuidSync(actionId)
+      if (effect) await forms.take(effect)
     }
 
     /** Counter "<actor|itemId>:<key>": click +1, right-click −1. */
