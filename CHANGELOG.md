@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.8.0
+
+Uses the forms API of WTF 1.12 (older system versions keep working without it):
+
+- Forms group (Inventory): *End form* while in a form; otherwise *Take form* for each form the actor can take (its own or its items')
+- Inventory marker: a paw on the item whose form is on
+- Existing HUD layouts may need *Reset layout* in the HUD settings to show the new group
+
 ## 0.7.0
 
 Uses the new item API of WTF 1.12 (older system versions keep working without it):
